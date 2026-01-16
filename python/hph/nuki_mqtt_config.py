@@ -9,7 +9,7 @@ import urllib.error
 # Default MQTT settings
 DEFAULT_BROKER = "localhost"
 DEFAULT_PORT = 1883
-BASE_TOPIC = "nukih/hub"
+BASE_TOPIC = "nuki/hub"
 
 # Topic definitions
 TOPIC_ACTION_SUFFIX = "/configuration/action"
@@ -77,7 +77,7 @@ class NukiConfigClient:
         self.broker = broker
         self.port = port
         self.base_topic = base_topic
-        self.client = mqtt.Client()
+        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         
         if username and password:
             self.client.username_pw_set(username, password)
@@ -89,7 +89,7 @@ class NukiConfigClient:
         self.waiting_for_topic = None
         self.ip_address = None
 
-    def on_connect(self, client, userdata, flags, rc):
+    def on_connect(self, client, userdata, flags, rc, properties):
         if rc == 0:
             print(f"Connected to MQTT broker at {self.broker}:{self.port}")
         else:
